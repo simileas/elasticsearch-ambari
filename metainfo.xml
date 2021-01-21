@@ -22,7 +22,7 @@
             <name>AMBARI_ELASTICSEARCH</name>
             <displayName>Elasticsearch</displayName>
             <comment>Indexing and Search</comment>
-            <version>6.0</version>
+            <version>7.7.0</version>
             <components>
                 <component>
                     <name>ES_MASTER</name>
@@ -52,7 +52,7 @@
                     <osFamily>any</osFamily>
                     <packages>
                         <package>
-                            <name>elasticsearch-6.0</name>
+                            <name>elasticsearch</name>
                         </package>
                     </packages>
                 </osSpecific>
@@ -63,7 +63,6 @@
                 <timeout>300</timeout>
             </commandScript>
             <configuration-dependencies>
-                <config-type>elastic-env</config-type>
                 <config-type>elastic-site</config-type>
                 <config-type>elastic-sysconfig</config-type>
             </configuration-dependencies>

@@ -43,12 +43,6 @@ def elastic():
               group=params.elastic_user
               )
 
-    print "Master env: ""{0}/elastic-env.sh".format(params.conf_dir)
-    File("{0}/elastic-env.sh".format(params.conf_dir),
-         owner=params.elastic_user,
-         content=InlineTemplate(params.elastic_env_sh_template)
-         )
-
     configurations = params.config['configurations']['elastic-site']
 
     print "Master yml: ""{0}/elasticsearch.yml".format(params.conf_dir)
@@ -62,7 +56,7 @@ def elastic():
 
     print "Master sysconfig: /etc/sysconfig/elasticsearch"
     File(format("/etc/sysconfig/elasticsearch"),
-         owner="root",
+         owner=params.elastic_user,
          group="root",
          content=InlineTemplate(params.sysconfig_template)
          )

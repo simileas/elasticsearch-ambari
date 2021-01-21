@@ -29,12 +29,10 @@ class Elasticsearch(Script):
         env.set_params(params)
 
         print 'Install the Master'
-        Execute('rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch')
-        Execute(format("echo \"[elasticsearch-2.x]\n"
-                "name=Elasticsearch repository for 6.x packages\n"
-                "baseurl=https://artifacts.elastic.co/packages/6.x/yum\n"
-                "gpgcheck=1\n"
-                "gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch\n"
+        Execute(format("echo \"[elasticsearch]\n"
+                "name=Elasticsearch repository for 7.x packages\n"
+                "baseurl=http://192.168.1.21/elastic-repo/\n"
+                "gpgcheck=0\n"
                 "enabled=1\" > /etc/yum.repos.d/elasticsearch.repo"))
 
         self.install_packages(env)

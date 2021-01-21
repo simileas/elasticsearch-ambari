@@ -20,19 +20,20 @@
 
 <configuration>
     <property>
+        <name>elastic_user</name>
+        <value>elasticsearch</value>
+        <property-type>USER</property-type>
+        <description>The user for Elasticsearch</description>
+    </property>
+    <property>
+        <name>user_group</name>
+        <value>elasticsearch</value>
+        <description>The group for Elasticsearch</description>
+    </property>
+    <property>
         <name>elastic_home</name>
         <value>/usr/share/elasticsearch/</value>
         <description>Elasticsearch Home Directory</description>
-    </property>
-    <property>
-        <name>data_dir</name>
-        <value>/var/lib/elasticsearch/</value>
-        <description>Elasticsearch Data Directory</description>
-    </property>
-    <property>
-        <name>work_dir</name>
-        <value>/tmp/elasticsearch/</value>
-        <description>Elasticsearch Work Directory</description>
     </property>
     <property>
         <name>conf_dir</name>
@@ -40,9 +41,9 @@
         <description>Elasticsearch Configuration Directory</description>
     </property>
     <property>
-        <name>heap_size</name>
-        <value>128m</value>
-        <description>Heap size</description>
+        <name>elastic_pid_dir</name>
+        <value>/var/run/elasticsearch</value>
+        <description>The directory for pid files</description>
     </property>
     <property>
         <name>max_open_files</name>
@@ -63,31 +64,16 @@
 # Directory where the Elasticsearch binary distribution resides
 ES_HOME={{elastic_home}}
 
-# Heap Size (defaults to 256m min, 1g max)
-ES_HEAP_SIZE={{heap_size}}
-
 # Maximum number of open files
 MAX_OPEN_FILES={{max_open_files}}
 
 # Maximum number of VMA (Virtual Memory Areas) a process can own
 MAX_MAP_COUNT={{max_map_count}}
 
-# Elasticsearch log directory
-LOG_DIR={{log_dir}}
-
-# Elasticsearch data directory
-DATA_DIR={{data_dir}}
-
-# Elasticsearch work directory
-WORK_DIR={{work_dir}}
-
 # Elasticsearch conf directory
-CONF_DIR={{conf_dir}}
+ES_PATH_CONF={{conf_dir}}
 
-# User to run as, change this to a specific elasticsearch user if possible
-# Also make sure, this user can write into the log directories in case you change them
-# This setting only works for the init script, but has to be configured separately for systemd startup
-ES_USER={{elastic_user}}
+PID_DIR={{pid_dir}}
         </value>
     </property>
 </configuration>

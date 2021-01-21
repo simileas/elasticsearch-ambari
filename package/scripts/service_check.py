@@ -40,7 +40,7 @@ class ServiceCheck(Script):
         # Need both the retry and ES timeout.  Can hit the URL before ES is ready at all and get no response, but can
         # also hit ES before things are green.
         host = "localhost:9200"
-        Execute("curl -XGET 'http://%s/_cluster/health?wait_for_status=green&timeout=120s'" % host,
+        Execute("curl -s -XGET 'http://%s/_cluster/health?wait_for_status=green&timeout=120s&pretty'" % host,
                 logoutput=True,
                 tries=6,
                 try_sleep=20
@@ -48,24 +48,26 @@ class ServiceCheck(Script):
 
         # Put a document into a new index.
 
-        Execute("curl -XPUT '%s/%s/test/1' -d '%s'" % (host, index, doc), logoutput=True)
+        Execute("curl -s -XPUT '%s/%s/_doc/1?pretty' -H 'Content-Type: application/json' -d '%s'" % (host, index, doc), logoutput=True)
 
         # Retrieve the document.  Use subprocess because we actually need the results here.
-        cmd_retrieve = "curl -XGET '%s/%s/test/1'" % (host, index)
+        cmd_retrieve = "curl -s -XGET '%s/%s/_doc/1'" % (host, index)
         proc = subprocess.Popen(cmd_retrieve, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (stdout, stderr) = proc.communicate()
         response_retrieve = stdout
         print("Retrieval response is: %s" % response_retrieve)
-        expected_retrieve = '{"_index":"%s","_type":"test","_id":"1","_version":1,"found":true,"_source":%s}' \
-            % (index, doc)
+        expected_retrieve = '{"_index":"%s","_type":"_doc","_id":"1","_version":1,"_seq_no":0,"_primary_term":1,"found":true,"_source":{"name": "Ambari Smoke test"}}' \
+            % (index)
+        print("Expected is          : %s" % expected_retrieve)
 
         # Delete the index
-        cmd_delete = "curl -XDELETE '%s/%s'" % (host, index)
+        cmd_delete = "curl -s -XDELETE '%s/%s'" % (host, index)
         proc = subprocess.Popen(cmd_delete, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (stdout, stderr) = proc.communicate()
         response_delete = stdout
-        print("Delete index response is: %s" % response_retrieve)
+        print("Delete index response is: %s" % response_delete)
         expected_delete = '{"acknowledged":true}'
+        print("Expected is             : %s" % expected_delete)
 
         if (expected_retrieve == response_retrieve) and (expected_delete == response_delete):
             print("Smoke test able to communicate with Elasticsearch")
